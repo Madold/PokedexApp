@@ -23,10 +23,8 @@ class MainViewModel @Inject constructor(
     val isLoading = _isLoading.asStateFlow()
     private val _pokemonList = MutableStateFlow<List<PokedexListEntry>>(listOf())
     val pokemonList = _pokemonList.asStateFlow()
-    private var _pokemonInfo = MutableStateFlow<PokemonInfoResponse?>(null)
+    private var _pokemonInfo = MutableStateFlow<Resource<PokemonInfoResponse>?>(null)
     val pokemonInfo = _pokemonInfo.asStateFlow()
-    private var _error = MutableStateFlow<Error<PokemonInfoResponse>>(Error(""))
-    val error = _error.asStateFlow()
 
     private fun fetchPokemons(limit: Int, offset: Int) {
         viewModelScope.launch {
@@ -53,7 +51,7 @@ class MainViewModel @Inject constructor(
                     _pokemonList.value = pokedexEntries!!
                 }
                 is Error -> {
-                    _error.value.message = result.message
+                    //TODO
                 }
             }
             _isLoading.value = false
@@ -64,15 +62,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.value = true
             val result = repository.getPokemon(name)
-
-            when(result) {
-                is Success -> {
-                    _pokemonInfo.value = result.data
-                }
-                is Error -> {
-                    //TODO: Handling connection errors
-                }
-            }
+            _pokemonInfo.value = result
             _isLoading.value = false
         }
     }

@@ -25,3 +25,4 @@ val FlyingType = Color(0xFF7ed6df)
 val SteelType = Color(0xFF95afc0)
 val NormalType = Color.Gray
 val DragonType = Color(0xFF22a6b3)
+val PsychicType = Color(0xFF9b59b6)
